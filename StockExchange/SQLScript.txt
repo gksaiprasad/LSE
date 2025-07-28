@@ -1,0 +1,41 @@
+CREATE TABLE Stocks (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Symbol NVARCHAR(10) NOT NULL,
+    Name NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Brokers (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Trades (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    StockId INT NOT NULL,
+    BrokerId INT NOT NULL,
+    TradeTime DATETIME NOT NULL,
+    Price DECIMAL(18, 2) NOT NULL,
+    Quantity INT NOT NULL,
+    FOREIGN KEY (StockId) REFERENCES Stocks(Id),
+    FOREIGN KEY (BrokerId) REFERENCES Brokers(Id)
+);
+
+
+INSERT INTO Stocks (Symbol, Name) VALUES 
+('INFY', 'Infosys Ltd'),
+('TCS', 'Tata Consultancy Services'),
+('HDFC', 'HDFC Bank');
+
+-- Brokers
+INSERT INTO Brokers (Name) VALUES 
+('Zerodha'),
+('ICICI Direct'),
+('Groww');
+
+-- Trades
+INSERT INTO Trades (StockId, BrokerId, TradeTime, Price, Quantity) VALUES
+(1, 1, GETDATE(), 1450.50, 100),
+(1, 2, GETDATE(), 1460.75, 150),
+(2, 1, GETDATE(), 3200.00, 50),
+(2, 3, GETDATE(), 3195.00, 120),
+(3, 2, GETDATE(), 1550.00, 80);
