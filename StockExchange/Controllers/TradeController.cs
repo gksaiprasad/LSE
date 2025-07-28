@@ -6,7 +6,7 @@ namespace LSE.TradeApi.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [ApiVersion("1")]
+    [ApiVersion("1.0")]
     public class TradeController : ControllerBase
     {
         private readonly ITradeService _tradeService;
