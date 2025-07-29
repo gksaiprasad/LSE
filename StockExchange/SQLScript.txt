@@ -1,41 +1,25 @@
+-- Stocks Table
 CREATE TABLE Stocks (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
-    Symbol NVARCHAR(10) NOT NULL,
+    Symbol NVARCHAR(10) PRIMARY KEY,  -- Matches TickerSymbol in Trade
     Name NVARCHAR(100) NOT NULL
 );
 
+-- Brokers Table
 CREATE TABLE Brokers (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
-    Name NVARCHAR(100) NOT NULL
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    Name NVARCHAR(100) NOT NULL,
+    IsActive BIT NOT NULL DEFAULT 1
 );
 
+-- Trades Table
 CREATE TABLE Trades (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    StockId INT NOT NULL,
-    BrokerId INT NOT NULL,
-    TradeTime DATETIME NOT NULL,
+    TickerSymbol NVARCHAR(10) NOT NULL,  -- FK to Stocks(Symbol)
     Price DECIMAL(18, 2) NOT NULL,
-    Quantity INT NOT NULL,
-    FOREIGN KEY (StockId) REFERENCES Stocks(Id),
+    Shares DECIMAL(18, 2) NOT NULL,
+    BrokerId UNIQUEIDENTIFIER NOT NULL,  -- FK to Brokers(Id)
+    Timestamp DATETIME NOT NULL DEFAULT GETUTCDATE(),
+
+    FOREIGN KEY (TickerSymbol) REFERENCES Stocks(Symbol),
     FOREIGN KEY (BrokerId) REFERENCES Brokers(Id)
 );
-
-
-INSERT INTO Stocks (Symbol, Name) VALUES 
-('INFY', 'Infosys Ltd'),
-('TCS', 'Tata Consultancy Services'),
-('HDFC', 'HDFC Bank');
-
--- Brokers
-INSERT INTO Brokers (Name) VALUES 
-('Zerodha'),
-('ICICI Direct'),
-('Groww');
-
--- Trades
-INSERT INTO Trades (StockId, BrokerId, TradeTime, Price, Quantity) VALUES
-(1, 1, GETDATE(), 1450.50, 100),
-(1, 2, GETDATE(), 1460.75, 150),
-(2, 1, GETDATE(), 3200.00, 50),
-(2, 3, GETDATE(), 3195.00, 120),
-(3, 2, GETDATE(), 1550.00, 80);
